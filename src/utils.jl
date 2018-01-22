@@ -71,16 +71,14 @@ function lightingoptions!(data)
         data[Symbol("lightcolor", string(k))] = value(data[:lighting]).colors[k]
     end
     # if material defined in argument call, keep this one
-    if :material ∈ keys(data)
-        println(typeof(data[:material]))
-        println(typeof(data[:lighting].value.material))
-        data[:lighting].value.material = data[:material]
+    if :material ∉ keys(data)
+        data[:material] = value(data[:lighting]).material
     end
     # add ambientcolor / diffusecolor  / specularcolor / shininess  if not defined by argument
     for symbl in [:ambientcolor, :diffusecolor, :specularcolor,
                   :specularcolorcoeff, :shininess]
         if symbl ∉ keys(data)
-            data[symbl] =  getfield(value(data[:lighting]).material, symbl)
+            data[symbl] =  getfield(value(data[:material]), symbl)
         end
     end
     data

@@ -286,7 +286,8 @@ struct Material
     specularcolorcoeff::Float32
     shininess::Float32
 end
-function Material(ambient, diffuse, specular, specularc, shininess)
+function Material(ambient::Number, diffuse::Number, specular::Number,
+                  specularc::Number, shininess::Number)
     Material(Vec3f0(ambient), Vec3f0(diffuse),Vec3f0(specular),
              Float32(specularc), Float32(shininess))
 end

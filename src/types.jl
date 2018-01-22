@@ -286,6 +286,13 @@ struct Material
     specularcolorcoeff::Float32
     shininess::Float32
 end
+function Material(ambient, diffuse, specular, specularc, shininess)
+    Material(Vec3f0(ambient), Vec3f0(diffuse),Vec3f0(specular),
+             Float32(specularc), Float32(shininess))
+end
+    Lighting(lights, [Vec3f0(1.) for k = 1:length(lights)],
+             materialdefault)
+end
 """
     Lighting(directions::Array{Vec3f0, 1}, colors::Array{Vec3f0, 1},
              material::Material)

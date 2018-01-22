@@ -70,18 +70,16 @@ function lightingoptions!(data)
         data[Symbol("lightdirection", string(k))] = value(data[:lighting]).directions[k]
         data[Symbol("lightcolor", string(k))] = value(data[:lighting]).colors[k]
     end
-    # add ambientcolor / material / shininess  if not defined by argument
-    if :ambientcolor ∉ keys(data)
-        data[:ambientcolor] =  value(data[:lighting]).ambientcolor
+    # if material defined in argument call, keep this one
+    if :material ∈ keys(data)
+        data[:lighting].material =  value(data[:material])
     end
-    if :material ∉ keys(data)
-        data[:material] =  value(data[:lighting]).material
-    end
-    if :shininess ∉ keys(data)
-        data[:shininess] =  value(data[:lighting]).shininess
-    end
-    for symbl in [:ambientcolor, :material, :shininess]
-        data[symbl] = value(data[symbl])
+    # add ambientcolor / diffusecolor  / specularcolor / shininess  if not defined by argument
+    for symbl in [:ambientcolor, :diffusecolor, :specularcolor,
+                  :specularcolorcoeff, :shininess]
+        if symbl ∉ keys(data)
+            data[symbl] =  getfield(value(data[:lighting]).material, symbl)
+        end
     end
     data
 end

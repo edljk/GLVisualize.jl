@@ -72,6 +72,8 @@ function lightingoptions!(data)
     end
     # if material defined in argument call, keep this one
     if :material ∈ keys(data)
+        println(typeof(data[:material]))
+        println(typeof(data[:lighting].value.material))
         data[:lighting].value.material = data[:material]
     end
     # add ambientcolor / diffusecolor  / specularcolor / shininess  if not defined by argument

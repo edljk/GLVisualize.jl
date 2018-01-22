@@ -72,7 +72,7 @@ function lightingoptions!(data)
     end
     # if material defined in argument call, keep this one
     if :material ∈ keys(data)
-        data[:lighting].material =  value(data[:material])
+        push!(data[:lighting].material, value(data[:material]))
     end
     # add ambientcolor / diffusecolor  / specularcolor / shininess  if not defined by argument
     for symbl in [:ambientcolor, :diffusecolor, :specularcolor,

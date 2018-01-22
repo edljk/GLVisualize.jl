@@ -1,13 +1,13 @@
 {{GLSL_VERSION}}
 ///////////////////////////////////////////////////////////////////////////////
-const int numberoflights = 5;
-uniform vec3 ambientcolor;// = vec3(0.3, 0.3, 0.3);
-uniform vec4 material; // = vec4(1., 0.4, 0.5, 1.);
-/*
-(ambient, diffuse, specular, specularcolorcoeff) ∈ [0, 1]
-default vec4(1., 0.4, 0.5, 1.);
-*/
+// material attributes
+uniform vec3 ambientcolor;
+uniform vec3 diffusecolor;
+uniform vec3 specularcolor;
+uniform float specularcolorcoeff;
 uniform float shininess;
+// light attributes
+const int numberoflights = 5;
 struct lightSource
 {
     vec3 color;
@@ -96,7 +96,7 @@ vec3 blinnphong(vec3 N, vec3 V, vec3 color){
     lights[3] = light3;
     lights[4] = light4;
     // initialize total lighting with ambient lighting
-    vec3 totalLighting = material[0] * vec3(ambientcolor);
+    vec3 totalLighting = ambientcolor;
 
     for (int index = 0; index < numberoflights; index++) // for all light sources
     {
@@ -108,11 +108,11 @@ vec3 blinnphong(vec3 N, vec3 V, vec3 color){
              // should the normalize(vec3(1)) be replaced by E = normalize(EyeDirection_cameraspace)
             float cosAlpha = clamp(dot(R, normalize(vec3(1))), 0, 1);
 
-            vec3 diffuseReflection = material[1] * vec3(lights[index].color) *
+            vec3 diffuseReflection = diffusecolor * vec3(lights[index].color) *
                                      cosTheta * color;
-            vec3 specularcolor = (1 - material[3]) * vec3(lights[index].color) +
-                                  material[3] * vec3(1);
-            vec3 specularReflection =  material[2] * vec3(specularcolor) *
+            vec3 specularcolor = (1 - specularcolorcoeff) * vec3(lights[index].color) +
+                                  specularcolorcoeff * vec3(1);
+            vec3 specularReflection =  specularcolor * vec3(specularcolor) *
                                        pow(cosAlpha, shininess);
             totalLighting = totalLighting +  diffuseReflection + specularReflection;
         }

@@ -270,33 +270,49 @@ struct GLVisualizeShader <: AbstractLazyShader
     end
 end
 
-# lighting related type
+# lighting related types
+"""
+    Material(ambientcolor::Vec3f0, diffusecolor::Vec3f0, specularcolor::Vec3f0,
+             specularcolorcoeff::Float32, shininess::Float32)
+
+# Arguments
+* material descibes the fields (ambientcolor, diffusecolor, specularcolor,
+                                specularcolorcoeff ∈ [0, 1], shininess)
+"""
+struct Material
+    ambientcolor::Vec3f0
+    diffusecolor::Vec3f0
+    specularcolor::Vec3f0
+    specularcolorcoeff::Float32
+    shininess::Float32
+end
 """
     Lighting(directions::Array{Vec3f0, 1}, colors::Array{Vec3f0, 1},
-             ambientcolor::Vec3f0, material::Vec4f0, shininess::Float32)
+             material::Material)
 
 # Arguments
 * the single attribute light is still take into account if :light[end] != default_light
   using the backlight intensity 0.4
-* material descibes the fields (ambient, diffuse, specular, specularcolorcoeff) ∈ [0, 1]
+* material descibes the fields (ambientcolor, diffusecolor, specularcolor,
+                                specularcolorcoeff ∈ [0, 1], shininess)
 """
 struct Lighting
     directions::Array{Vec3f0, 1}
     colors::Array{Vec3f0, 1}
-    ambientcolor::Vec3f0
-    material::Vec4f0
-    shininess::Float32
+    material::Material
+
 end
-ambientcolordefault = Vec3f0(0.1)
-materialdefault = Vec4f0(.9, 0.7, 0.3, .9)
+ambientcolordefault = Vec3f0(0.09)
 shininessdefault = Float32(5.)
+materialdefault = Material(ambientcolordefault, Vec3f0(0.7), Vec3f0(0.3),
+                           Float32(0.9), shininessdefault)
+
 function Lighting(lights::Array{Vec3f0, 1})
     Lighting(lights, [Vec3f0(1.) for k = 1:length(lights)],
-             ambientcolordefault, materialdefault, shininessdefault)
+             materialdefault)
 end
 function Lighting(lights::Array{Vec3f0, 1}, lightscolors::Array{Vec3f0, 1})
-    Lighting(lights, lightscolors,
-             ambientcolordefault, materialdefault, shininessdefault)
+    Lighting(lights, lightscolors, materialdefault)
 end
 function  GLAbstraction.gl_convert(x::GLVisualize.Lighting)
     return x

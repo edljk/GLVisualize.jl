@@ -110,9 +110,9 @@ vec3 blinnphong(vec3 N, vec3 V, vec3 color){
 
             vec3 diffuseReflection = diffusecolor * vec3(lights[index].color) *
                                      cosTheta * color;
-            vec3 specularcolor = (1 - specularcolorcoeff) * vec3(lights[index].color) +
-                                  specularcolorcoeff * vec3(1);
-            vec3 specularReflection =  specularcolor * vec3(specularcolor) *
+            vec3 specularcolorloc = (1 - specularcolorcoeff) * vec3(lights[index].color) +
+                                     specularcolorcoeff * vec3(1);
+            vec3 specularReflection =  specularcolor * specularcolorloc *
                                        pow(cosAlpha, shininess);
             totalLighting = totalLighting +  diffuseReflection + specularReflection;
         }
